@@ -8,8 +8,9 @@ export const dynamic = "force-dynamic";
 export default async function AdminsPage({
   searchParams
 }: {
-  searchParams: { temp?: string; error?: string };
+  searchParams: Promise<{ temp?: string; error?: string }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const admin = await requireAdmin();
   if (admin.mustChangePassword) redirect("/admin/change-password");
 
@@ -33,9 +34,9 @@ export default async function AdminsPage({
           <span className="notice">Owner only</span>
         )}
       </div>
-      {searchParams.temp ? (
+      {resolvedSearchParams?.temp ? (
         <div className="notice" style={{ marginTop: 12 }}>
-          Temporary password: <strong>{searchParams.temp}</strong>
+          Temporary password: <strong>{resolvedSearchParams.temp}</strong>
         </div>
       ) : null}
       {!canManage ? (
