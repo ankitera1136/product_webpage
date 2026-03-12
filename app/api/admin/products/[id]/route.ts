@@ -7,13 +7,17 @@ import { isValidUrl, clampText } from "../../../../../lib/validation";
 
 export const runtime = "nodejs";
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const admin = await getSessionAdmin();
   if (!admin) return NextResponse.redirect(new URL("/admin/login", request.url));
   if (admin.mustChangePassword) return NextResponse.redirect(new URL("/admin/change-password", request.url));
 
+  const resolvedParams = await params;
   const method = new URL(request.url).searchParams.get("_method");
-  const productId = Number(params.id);
+  const productId = Number(resolvedParams.id);
 
   if (method === "delete") {
     await initDb();

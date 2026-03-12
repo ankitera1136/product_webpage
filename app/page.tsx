@@ -8,11 +8,12 @@ export const dynamic = "force-dynamic";
 export default async function Home({
   searchParams
 }: {
-  searchParams: { q?: string; category?: string; tag?: string };
+  searchParams: Promise<{ q?: string; category?: string; tag?: string }>;
 }) {
-  const query = searchParams.q || "";
-  const category = searchParams.category || "";
-  const tag = searchParams.tag || "";
+  const resolvedSearchParams = await searchParams;
+  const query = resolvedSearchParams?.q || "";
+  const category = resolvedSearchParams?.category || "";
+  const tag = resolvedSearchParams?.tag || "";
 
   const products = await listPublicProducts({ q: query, category, tag });
   const categories = await getCategories();
