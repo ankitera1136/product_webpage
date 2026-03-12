@@ -1,6 +1,44 @@
 import bcrypt from "bcryptjs";
-import { sql } from "@vercel/postgres";
+import { createClient, createPool, postgresConnectionString } from "@vercel/postgres";
 import { config } from "./config";
+
+type SqlTag = (strings: TemplateStringsArray, ...values: any[]) => Promise<{ rows: any[] }>;
+
+const pooledConnectionString =
+  postgresConnectionString("pool") ?? process.env.POSTGRES_URL;
+const directConnectionString =
+  postgresConnectionString("direct") ??
+  process.env.POSTGRES_URL_NON_POOLING ??
+  process.env.POSTGRES_URL;
+
+const hasPooledConnection =
+  typeof pooledConnectionString === "string" &&
+  pooledConnectionString.includes("-pooler.");
+
+let pool: ReturnType<typeof createPool> | null = null;
+
+export const sql: SqlTag = async (strings, ...values) => {
+  if (hasPooledConnection) {
+    if (!pool) {
+      pool = createPool({ connectionString: pooledConnectionString });
+    }
+    return pool.sql(strings, ...values);
+  }
+
+  if (!directConnectionString) {
+    throw new Error(
+      "Missing Postgres connection string. Set POSTGRES_URL (pooled) or POSTGRES_URL_NON_POOLING (direct)."
+    );
+  }
+
+  const client = createClient({ connectionString: directConnectionString });
+  await client.connect();
+  try {
+    return await client.sql(strings, ...values);
+  } finally {
+    await client.end();
+  }
+};
 
 let schemaReady: Promise<void> | null = null;
 
@@ -97,5 +135,3 @@ export async function initDb() {
   }
   return schemaReady;
 }
-
-export { sql };
