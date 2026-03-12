@@ -4,11 +4,16 @@ import { getProductById } from "../../../../../lib/products";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditProductPage({ params }: { params: { id: string } }) {
+export default async function EditProductPage({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const admin = await requireAdmin();
   if (admin.mustChangePassword) redirect("/admin/change-password");
 
-  const product = await getProductById(Number(params.id));
+  const resolvedParams = await params;
+  const product = await getProductById(Number(resolvedParams.id));
   if (!product) return notFound();
 
   return (

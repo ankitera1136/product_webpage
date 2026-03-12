@@ -4,8 +4,13 @@ import { AdSlot } from "../../../components/AdSlot";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const product = await getProductBySlug(params.slug);
+export default async function ProductPage({
+  params
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const resolvedParams = await params;
+  const product = await getProductBySlug(resolvedParams.slug);
   if (!product) return notFound();
 
   return (
