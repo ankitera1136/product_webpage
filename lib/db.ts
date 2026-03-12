@@ -5,10 +5,14 @@ import { config } from "./config";
 type SqlTag = (strings: TemplateStringsArray, ...values: any[]) => Promise<{ rows: any[] }>;
 
 const pooledConnectionString =
-  postgresConnectionString("pool") ?? process.env.POSTGRES_URL;
+  postgresConnectionString("pool") ??
+  process.env.POSTGRES_URL ??
+  process.env.DATABASE_URL;
 const directConnectionString =
   postgresConnectionString("direct") ??
   process.env.POSTGRES_URL_NON_POOLING ??
+  process.env.DATABASE_URL_UNPOOLED ??
+  process.env.DATABASE_URL ??
   process.env.POSTGRES_URL;
 
 const hasPooledConnection =
@@ -27,7 +31,7 @@ export const sql: SqlTag = async (strings, ...values) => {
 
   if (!directConnectionString) {
     throw new Error(
-      "Missing Postgres connection string. Set POSTGRES_URL (pooled) or POSTGRES_URL_NON_POOLING (direct)."
+      "Missing Postgres connection string. Set POSTGRES_URL (pooled) or POSTGRES_URL_NON_POOLING (direct). Neon also provides DATABASE_URL / DATABASE_URL_UNPOOLED."
     );
   }
 
