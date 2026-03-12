@@ -1,0 +1,169 @@
+:root {
+  --bg: #0f131a;
+  --card: #18202b;
+  --text: #f5f7fb;
+  --muted: #a7b1c2;
+  --accent: #39d98a;
+  --accent-2: #4a8cff;
+  --danger: #ff6b6b;
+  --border: #253041;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at 20% 20%, #1b2431 0%, #0f131a 60%);
+  color: var(--text);
+}
+
+a { color: inherit; text-decoration: none; }
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+
+header.site {
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  background: rgba(15, 19, 26, 0.8);
+  border-bottom: 1px solid var(--border);
+  z-index: 5;
+}
+
+header.site .inner {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+nav a {
+  margin-right: 16px;
+  color: var(--muted);
+}
+
+nav a:hover { color: var(--text); }
+
+.hero {
+  padding: 48px 0 24px;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 3vw, 3rem);
+  margin: 0 0 12px;
+}
+
+.hero p { color: var(--muted); }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.product img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #111;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.button {
+  display: inline-block;
+  background: var(--accent);
+  color: #08140f;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.button.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.button.danger {
+  background: var(--danger);
+  color: #200;
+}
+
+form input, form select, form textarea {
+  width: 100%;
+  margin: 8px 0 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0f141c;
+  color: var(--text);
+}
+
+label { color: var(--muted); font-size: 14px; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.notice {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.footer {
+  margin-top: 48px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.ad-slot {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  color: var(--muted);
+  background: rgba(15, 20, 30, 0.7);
+}
+
+@media (max-width: 720px) {
+  nav a { margin-right: 10px; }
+  .hero { padding: 32px 0 16px; }
+}
